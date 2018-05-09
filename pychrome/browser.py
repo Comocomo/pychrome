@@ -25,7 +25,13 @@ class Browser(object):
     def new_tab(self, url=None, timeout=None):
         url = url or ''
         rp = requests.get("%s/json/new?%s" % (self.dev_url, url), timeout=timeout)
-        tab = Tab(**rp.json())
+        tab_json = rp.json()
+
+        # browserless returns a list with a single tab dict, while local Chrome just returns the dict
+        if type(tab_json) == list:
+            tab_json = tab_json[0]
+
+        tab = Tab(**tab_json)
         self._tabs[tab.id] = tab
         return tab
 
