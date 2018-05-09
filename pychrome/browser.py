@@ -24,13 +24,13 @@ class Browser(object):
 
     def new_tab(self, url=None, timeout=None):
         url = url or ''
-        rp = requests.get("%s/json/new?%s" % (self.dev_url, url), json=True, timeout=timeout)
+        rp = requests.get("%s/json/new?%s" % (self.dev_url, url), timeout=timeout)
         tab = Tab(**rp.json())
         self._tabs[tab.id] = tab
         return tab
 
     def list_tab(self, timeout=None):
-        rp = requests.get("%s/json" % self.dev_url, json=True, timeout=timeout)
+        rp = requests.get("%s/json" % self.dev_url, timeout=timeout)
         tabs_map = {}
         for tab_json in rp.json():
             if tab_json['type'] != 'page':  # pragma: no cover
@@ -63,7 +63,7 @@ class Browser(object):
         return rp.text
 
     def version(self, timeout=None):
-        rp = requests.get("%s/json/version" % self.dev_url, json=True, timeout=timeout)
+        rp = requests.get("%s/json/version" % self.dev_url, timeout=timeout)
         return rp.json()
 
     def __str__(self):
